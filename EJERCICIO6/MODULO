@@ -1,0 +1,72 @@
+import java.util.Scanner;
+class Main {
+    private String nombreEmpleado;
+    private double salarioMensualBase;
+    private int diasAsistidosEmpleado;
+
+    public Main(String nombreEmpleado, double salarioMensualBase, int diasAsistidosEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+        this.salarioMensualBase = salarioMensualBase;
+        this.diasAsistidosEmpleado = diasAsistidosEmpleado;
+    }
+
+    public String getNombreEmpleado() { return nombreEmpleado; }
+    public void setNombreEmpleado(String nombreEmpleado) { this.nombreEmpleado = nombreEmpleado; }
+
+    public double getSalarioMensualBase() { return salarioMensualBase; }
+    public void setSalarioMensualBase(double salarioMensualBase) { this.salarioMensualBase = salarioMensualBase; }
+
+    public int getDiasAsistidosEmpleado() { return diasAsistidosEmpleado; }
+    public void setDiasAsistidosEmpleado(int diasAsistidosEmpleado) { this.diasAsistidosEmpleado = diasAsistidosEmpleado; }
+
+    public double calcularSalarioTotal(int diasLaboralesTotales) {
+        if (diasLaboralesTotales <= 0) return 0;
+        double pagoPorDia = salarioMensualBase / diasLaboralesTotales;
+        return pagoPorDia * diasAsistidosEmpleado;
+    }
+
+    public boolean asistenciaCompleta(int diasLaboralesTotales) {
+        return diasAsistidosEmpleado == diasLaboralesTotales;
+    }
+}
+class ControlEmpleado {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== CONTROL DE EMPLEADOS ===");
+
+        System.out.print("Nombre del empleado: ");
+        String nombre = lector.nextLine();
+
+        System.out.print("Ingrese el salario base mensual: ");
+        double salario = lector.nextDouble();
+
+        System.out.print("Ingrese los días asistidos: ");
+        int asistidos = lector.nextInt();
+
+        System.out.print("Ingrese el total de días laborables del mes: ");
+        int diasLaboralesTotales = lector.nextInt();
+
+        // Main es la clase del empleado
+        Main empleado = new Main(nombre, salario, asistidos);
+
+        System.out.println("\n=== ATRIBUTOS DEL EMPLEADO ===");
+        System.out.println("Nombre: " + empleado.getNombreEmpleado());
+        System.out.println("Salario base: $" + empleado.getSalarioMensualBase());
+        System.out.println("Días asistidos: " + empleado.getDiasAsistidosEmpleado());
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Cálculo de Salario ===");
+        double salarioTotal = empleado.calcularSalarioTotal(diasLaboralesTotales);
+        System.out.println("Salario correspondiente al mes: $" + salarioTotal);
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Verificación de Asistencia ===");
+        if (empleado.asistenciaCompleta(diasLaboralesTotales))
+            System.out.println("El empleado cumplió con todos los días de asistencia.");
+        else
+            System.out.println("El empleado NO cumplió la asistencia completa.");
+
+        System.out.println("\n=== FIN DEL EJERCICIO 6 ===\n");
+    }
+}
