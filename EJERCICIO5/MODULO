@@ -1,0 +1,74 @@
+import java.time.LocalDate;
+import java.util.Scanner;
+
+class Main {
+    private String marcaVehiculo;
+    private int anioFabricacion;
+    private double velocidadMaximaKm;
+
+    public Main(String marcaVehiculo, int anioFabricacion, double velocidadMaximaKm) {
+        this.marcaVehiculo = marcaVehiculo;
+        this.anioFabricacion = anioFabricacion;
+        this.velocidadMaximaKm = velocidadMaximaKm;
+    }
+
+    public String getMarcaVehiculo() { return marcaVehiculo; }
+    public void setMarcaVehiculo(String marcaVehiculo) { this.marcaVehiculo = marcaVehiculo; }
+
+    public int getAnioFabricacion() { return anioFabricacion; }
+    public void setAnioFabricacion(int anioFabricacion) { this.anioFabricacion = anioFabricacion; }
+
+    public double getVelocidadMaximaKm() { return velocidadMaximaKm; }
+    public void setVelocidadMaximaKm(double velocidadMaximaKm) { this.velocidadMaximaKm = velocidadMaximaKm; }
+
+    public boolean encender(int anioActual) {
+        int aniosAntiguedad = anioActual - anioFabricacion;
+        return aniosAntiguedad <= 2;  // Se enciende solo si tiene 2 años o menos
+    }
+
+    public int calcularAntiguedad(int anioActual) {
+        return anioActual - anioFabricacion;
+    }
+}
+class ControlAutomovil {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== DATOS DE VEHÍCULO: AUTOMÓVIL ===");
+
+        System.out.print("Ingrese la marca del vehículo: ");
+        String marcaVehiculo = lector.nextLine();
+
+        System.out.print("Ingrese el año de fabricación: ");
+        int anioFabricacionIngresado = lector.nextInt();
+
+        System.out.print("Ingrese la velocidad máxima (km/h): ");
+        double velocidadMaximaIngresada = lector.nextDouble();
+        
+        Main automovil = new Main(marcaVehiculo, anioFabricacionIngresado, velocidadMaximaIngresada);
+
+        int anioActual = LocalDate.now().getYear();
+
+        System.out.println("\n=== ATRIBUTOS DEL AUTOMÓVIL ===");
+        System.out.println("Marca: " + automovil.getMarcaVehiculo());
+        System.out.println("Año de fabricación: " + automovil.getAnioFabricacion());
+        System.out.println("Velocidad máxima: " + automovil.getVelocidadMaximaKm() + " km/h");
+
+        boolean encendidoCorrecto = automovil.encender(anioActual);
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Encender Vehículo ===");
+        if (encendidoCorrecto)
+            System.out.println("El vehículo encendió correctamente.");
+        else
+            System.out.println("El vehículo NO enciende debido a antigüedad.");
+
+        int aniosAntiguedad = automovil.calcularAntiguedad(anioActual);
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Antigüedad ===");
+        System.out.println("El automóvil tiene " + aniosAntiguedad + " años de antigüedad.");
+
+        System.out.println("\n=== FIN DEL EJERCICIO 5 ===\n");
+    }
+}
