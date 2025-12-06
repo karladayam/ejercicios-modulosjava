@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+class Main {
+    private String nombreProducto;
+    private double precioBase;
+    private double descuentoAplicado;
+
+    public Main(String nombreProducto, double precioBase, double descuentoAplicado) {
+        this.nombreProducto = nombreProducto;
+        this.precioBase = precioBase;
+        this.descuentoAplicado = descuentoAplicado;
+    }
+
+    public String getNombreProducto() { return nombreProducto; }
+    public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
+
+    public double getPrecioBase() { return precioBase; }
+    public void setPrecioBase(double precioBase) { this.precioBase = precioBase; }
+
+    public double getDescuentoAplicado() { return descuentoAplicado; }
+    public void setDescuentoAplicado(double descuentoAplicado) { this.descuentoAplicado = descuentoAplicado; }
+
+    public double calcularMontoDescuento() {
+        return precioBase * (descuentoAplicado / 100.0);
+    }
+
+    public double calcularPrecioFinal() {
+        return precioBase - calcularMontoDescuento();
+    }
+}
+
+
+class ControlProductoDescuento {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== SISTEMA DE DESCUENTO DE PRODUCTOS ===");
+
+        System.out.print("Ingrese el nombre del producto: ");
+        String nombreProducto = lector.nextLine();
+
+        System.out.print("Ingrese el precio original: ");
+        double precioIngresado = lector.nextDouble();
+
+        System.out.print("Ingrese el porcentaje de descuento (%): ");
+        double porcentajeIngresado = lector.nextDouble();
+
+        
+        Main productoDescuento = new Main(nombreProducto, precioIngresado, porcentajeIngresado);
+
+        System.out.println("\n=== DATOS DEL PRODUCTO ===");
+        System.out.println("Producto: " + productoDescuento.getNombreProducto());
+        System.out.println("Precio original: $" + productoDescuento.getPrecioBase());
+        System.out.println("Descuento aplicado: " + productoDescuento.getDescuentoAplicado() + "%");
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Calcular Monto del Descuento ===");
+        double montoDescuento = productoDescuento.calcularMontoDescuento();
+        System.out.println("Monto descontado: $" + montoDescuento);
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Precio Final ===");
+        double precioFinal = productoDescuento.calcularPrecioFinal();
+        System.out.println("Precio final después del descuento: $" + precioFinal);
+
+        System.out.println("\n=== FIN DEL EJERCICIO 8 ===\n");
+    }
+}
