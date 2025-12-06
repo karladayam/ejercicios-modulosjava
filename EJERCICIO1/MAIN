@@ -1,0 +1,6 @@
+public class nuevo {
+    public static void main(String[] args) {
+        ControlReservaLibros sistema = new ControlReservaLibros();
+        sistema.ejecutar();
+    }
+}
