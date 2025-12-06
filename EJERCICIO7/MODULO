@@ -1,0 +1,68 @@
+import java.util.Scanner;
+
+class Main {
+    private String nombreEstudiante;
+    private double primeraCalificacion;
+    private double segundaCalificacion;
+
+    public Main(String nombreEstudiante, double primeraCalificacion, double segundaCalificacion) {
+        this.nombreEstudiante = nombreEstudiante;
+        this.primeraCalificacion = primeraCalificacion;
+        this.segundaCalificacion = segundaCalificacion;
+    }
+
+    public String getNombreEstudiante() { return nombreEstudiante; }
+    public void setNombreEstudiante(String nombreEstudiante) { this.nombreEstudiante = nombreEstudiante; }
+
+    public double getPrimeraCalificacion() { return primeraCalificacion; }
+    public void setPrimeraCalificacion(double primeraCalificacion) { this.primeraCalificacion = primeraCalificacion; }
+
+    public double getSegundaCalificacion() { return segundaCalificacion; }
+    public void setSegundaCalificacion(double segundaCalificacion) { this.segundaCalificacion = segundaCalificacion; }
+
+    public double calcularPromedio() {
+        return (primeraCalificacion + segundaCalificacion) / 2.0;
+    }
+
+    public boolean aprobo() {
+        return calcularPromedio() >= 70.0;
+    }
+}
+class ControlEstudiante {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== SISTEMA DE CALIFICACIÓN DE ESTUDIANTES ===");
+
+        System.out.print("Ingrese el nombre del estudiante: ");
+        String nombreEstudiante = lector.nextLine();
+
+        System.out.print("Ingrese la primera calificación: ");
+        double calificacionUnoIngresada = lector.nextDouble();
+
+        System.out.print("Ingrese la segunda calificación: ");
+        double calificacionDosIngresada = lector.nextDouble();
+
+        // Main es la clase del estudiante
+        Main estudiante = new Main(nombreEstudiante, calificacionUnoIngresada, calificacionDosIngresada);
+
+        System.out.println("\n=== DATOS DEL ESTUDIANTE ===");
+        System.out.println("Nombre: " + estudiante.getNombreEstudiante());
+        System.out.println("Calificación 1: " + estudiante.getPrimeraCalificacion());
+        System.out.println("Calificación 2: " + estudiante.getSegundaCalificacion());
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Calcular Promedio ===");
+        double promedio = estudiante.calcularPromedio();
+        System.out.println("Promedio final: " + promedio);
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Resultado Final ===");
+        if (estudiante.aprobo())
+            System.out.println("El estudiante APROBÓ.");
+        else
+            System.out.println("El estudiante REPROBÓ.");
+
+        System.out.println("\n=== FIN DEL EJERCICIO 7 ===\n");
+    }
+}
