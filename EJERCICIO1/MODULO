@@ -1,0 +1,193 @@
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Main {
+    private int idArticulo;
+    private String tituloArticulo;
+    private String autorArticulo;
+    private int anioPublicacion;
+    private boolean estaReservado;
+
+    public Main(int idArticulo, String tituloArticulo, String autorArticulo, int anioPublicacion) {
+        this.idArticulo = idArticulo;
+        this.tituloArticulo = tituloArticulo;
+        this.autorArticulo = autorArticulo;
+        this.anioPublicacion = anioPublicacion;
+        this.estaReservado = false;
+    }
+
+    public int getIdArticulo() { return idArticulo; }
+    public String getTituloArticulo() { return tituloArticulo; }
+    public String getAutorArticulo() { return autorArticulo; }
+    public int getAnioPublicacion() { return anioPublicacion; }
+    public boolean isEstaReservado() { return estaReservado; }
+
+    public void setEstaReservado(boolean estaReservado) {
+        this.estaReservado = estaReservado;
+    }
+
+    public int calcularAntiguedad(int anioActual) {
+        return anioActual - anioPublicacion;
+    }
+
+    public boolean esReservable(int anioActual) {
+        return calcularAntiguedad(anioActual) > 5;
+    }
+}
+
+class ControlReservaLibros {
+
+    private List<Main> listaArticulos;
+    private Scanner lector;
+    private int anioActual;
+
+    public ControlReservaLibros() {
+        lector = new Scanner(System.in);
+        listaArticulos = new ArrayList<>();
+        anioActual = LocalDate.now().getYear();
+
+
+        listaArticulos.add(new Main(101, "Cien años de soledad", "Gabriel García Márquez", 1967));
+        listaArticulos.add(new Main(102, "Don Quijote de la Mancha", "Miguel de Cervantes", 1605));
+        listaArticulos.add(new Main(103, "El Hobbit", "J. R. R. Tolkien", 1937));
+        listaArticulos.add(new Main(104, "El Perfume", "Patrick Süskind", 1985));
+        listaArticulos.add(new Main(105, "Orgullo y Prejuicio", "Jane Austen", 1813));
+
+        listaArticulos.add(new Main(201, "El Principito (Ed. reciente)", "Antoine de Saint-Exupéry", 2000));
+        listaArticulos.add(new Main(202, "Harry Potter y la Piedra Filosofal (Ed. nueva)", "J. K. Rowling", 1997));
+        listaArticulos.add(new Main(203, "Los Juegos del Hambre (Ed. nueva)", "Suzanne Collins", 2008));
+        listaArticulos.add(new Main(204, "El Código Da Vinci (Ed. nueva)", "Dan Brown", 2003));
+        listaArticulos.add(new Main(205, "It (Ed. nueva)", "Stephen King", 2015));
+    }
+
+    private void mostrarTabla(List<Main> lista) {
+        System.out.println("\nID    | Título                                 | Autor");
+        System.out.println("---------------------------------------------------------------------");
+        for (Main libro : lista) {
+            System.out.printf("%-5d | %-38s | %s%n",
+                    libro.getIdArticulo(),
+                    libro.getTituloArticulo(),
+                    libro.getAutorArticulo());
+        }
+    }
+
+    private void mostrarTablaNoReservados() {
+        List<Main> disponibles = new ArrayList<>();
+
+        for (Main l : listaArticulos) {
+            if (!l.isEstaReservado() && l.esReservable(anioActual)) {
+                disponibles.add(l);
+            }
+        }
+
+        if (disponibles.isEmpty()) {
+            System.out.println("\nNo hay libros disponibles para reservar.");
+        } else {
+            mostrarTabla(disponibles);
+        }
+    }
+
+    private Main buscarPorId(int id) {
+        for (Main l : listaArticulos) {
+            if (l.getIdArticulo() == id) return l;
+        }
+        return null;
+    }
+
+    public void ejecutar() {
+
+        while (true) {
+            System.out.println("\n=== SISTEMA DE RESERVA DE LIBROS ===");
+            mostrarTabla(listaArticulos);
+
+            System.out.print("\n¿Qué ID de libro desea reservar?: ");
+            int idSeleccion;
+
+            try {
+                idSeleccion = Integer.parseInt(lector.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("Entrada no válida.");
+                continue;
+            }
+
+            Main libro = buscarPorId(idSeleccion);
+
+            if (libro == null) {
+                System.out.println("ID no válido.");
+                continue;
+            }
+
+            if (libro.isEstaReservado()) {
+                System.out.println("\nEste libro ya está reservado.");
+                mostrarTablaNoReservados();
+                continue;
+            }
+
+            if (!libro.esReservable(anioActual)) {
+                System.out.println("\nEste libro no es reservable (tiene menos de 5 años).");
+                mostrarTablaNoReservados();
+                continue;
+            }
+
+            List<Main> carrito = new ArrayList<>();
+            carrito.add(libro);
+
+            System.out.println("\nLibro agregado al carrito.");
+
+            while (true) {
+                System.out.print("\n¿Desea agregar otro libro? (si/no): ");
+                String resp = lector.nextLine().trim();
+
+                if (!resp.equalsIgnoreCase("si")) break;
+
+                mostrarTablaNoReservados();
+
+                System.out.print("Ingrese el ID del otro libro: ");
+                int idNuevo;
+
+                try {
+                    idNuevo = Integer.parseInt(lector.nextLine().trim());
+                } catch (Exception e) {
+                    System.out.println("Entrada inválida.");
+                    continue;
+                }
+
+                Main nuevo = buscarPorId(idNuevo);
+
+                if (nuevo == null || nuevo.isEstaReservado() || !nuevo.esReservable(anioActual)) {
+                    System.out.println("Ese libro no está disponible.");
+                    continue;
+                }
+
+                if (carrito.contains(nuevo)) {
+                    System.out.println("Ese libro ya está en el carrito.");
+                    continue;
+                }
+
+                carrito.add(nuevo);
+                System.out.println("Libro agregado al carrito.");
+            }
+
+            System.out.println("\nLibros que serán reservados:");
+            for (Main l : carrito) {
+                System.out.println("- " + l.getTituloArticulo());
+            }
+
+            System.out.print("\n¿Confirmar reserva? (si/no): ");
+            if (lector.nextLine().trim().equalsIgnoreCase("si")) {
+                for (Main l : carrito) {
+                    l.setEstaReservado(true);
+                }
+                System.out.println("Reserva realizada con éxito.");
+            }
+
+            System.out.print("\n¿Desea salir? (si/no): ");
+            if (lector.nextLine().trim().equalsIgnoreCase("si")) {
+                System.out.println("Saliendo del sistema...");
+                break;
+            }
+        }
+    }
+}
