@@ -1,0 +1,82 @@
+import java.util.Scanner;
+
+class Main {
+    private String numeroDeCuenta;
+    private String nombreTitular;
+    private double saldoDisponible;
+
+    public Main(String numeroDeCuenta, String nombreTitular, double saldoDisponible) {
+        this.numeroDeCuenta = numeroDeCuenta;
+        this.nombreTitular = nombreTitular;
+        this.saldoDisponible = saldoDisponible;
+    }
+
+    public String getNumeroDeCuenta() { return numeroDeCuenta; }
+    public void setNumeroDeCuenta(String numeroDeCuenta) { this.numeroDeCuenta = numeroDeCuenta; }
+
+    public String getNombreTitular() { return nombreTitular; }
+    public void setNombreTitular(String nombreTitular) { this.nombreTitular = nombreTitular; }
+
+    public double getSaldoDisponible() { return saldoDisponible; }
+    public void setSaldoDisponible(double saldoDisponible) { this.saldoDisponible = saldoDisponible; }
+
+    public void depositar(double montoOperacion) {
+        if (montoOperacion > 0) {
+            saldoDisponible += montoOperacion;
+        }
+    }
+
+    public boolean retirar(double montoOperacion) {
+        if (montoOperacion > 0 && montoOperacion <= saldoDisponible) {
+            saldoDisponible -= montoOperacion;
+            return true;
+        }
+        return false;
+    }
+}
+class ControlCuentaAhorro {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== SISTEMA DE CUENTA DE AHORRO ===");
+
+        System.out.print("Ingrese el número de cuenta: ");
+        String numeroCuentaIngresado = lector.nextLine();
+
+        System.out.print("Ingrese el nombre del titular: ");
+        String nombreTitularIngresado = lector.nextLine();
+
+        System.out.print("Ingrese el saldo inicial: ");
+        double saldoInicial = lector.nextDouble();
+
+        // Main es la clase que representa la cuenta
+        Main c = new Main(numeroCuentaIngresado, nombreTitularIngresado, saldoInicial);
+
+        System.out.println("\n=== DATOS DE LA CUENTA ===");
+        System.out.println("Número de cuenta: " + c.getNumeroDeCuenta());
+        System.out.println("Titular: " + c.getNombreTitular());
+        System.out.println("Saldo actual: $" + c.getSaldoDisponible());
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Depósito ===");
+        System.out.print("Ingrese la cantidad a depositar: ");
+        double montoDeposito = lector.nextDouble();
+        c.depositar(montoDeposito);
+        System.out.println("Saldo después del depósito: $" + c.getSaldoDisponible());
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Retiro ===");
+        System.out.print("Ingrese la cantidad a retirar: ");
+        double montoRetiro = lector.nextDouble();
+
+        if (c.retirar(montoRetiro)) {
+            System.out.println("Retiro exitoso.");
+        } else {
+            System.out.println("Fondos insuficientes o monto inválido.");
+        }
+
+        System.out.println("Saldo final: $" + c.getSaldoDisponible());
+
+        System.out.println("\n=== FIN DEL EJERCICIO 4 ===\n");
+    }
+}
