@@ -1,89 +1,73 @@
 import java.util.Scanner;
 
-
 class Main {
-    private String nombreAnimal;
-    private String especieAnimal;
-    private int nivelEnergia;  // 0 a 100
+    private String codigo;
+    private int capacidad;
+    private int reservados;
 
-    public Main(String nombreAnimal, String especieAnimal, int nivelEnergia) {
-        this.nombreAnimal = nombreAnimal;
-        this.especieAnimal = especieAnimal;
-        this.nivelEnergia = Math.max(0, Math.min(100, nivelEnergia));
+    public Main(String codigo, int capacidad, int reservados) {
+        this.codigo = codigo;
+        this.capacidad = capacidad;
+        this.reservados = reservados;
     }
 
-    public String getNombreAnimal() { return nombreAnimal; }
-    public void setNombreAnimal(String nombreAnimal) { this.nombreAnimal = nombreAnimal; }
+    public String getCodigo() { return codigo; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
 
-    public String getEspecieAnimal() { return especieAnimal; }
-    public void setEspecieAnimal(String especieAnimal) { this.especieAnimal = especieAnimal; }
+    public int getCapacidad() { return capacidad; }
+    public void setCapacidad(int capacidad) { this.capacidad = capacidad; }
 
-    public int getNivelEnergia() { return nivelEnergia; }
-    public void setNivelEnergia(int nivelEnergia) {
-        this.nivelEnergia = Math.max(0, Math.min(100, nivelEnergia));
-    }
+    public int getReservados() { return reservados; }
 
-    public String consumirEnergia(int cantidad) {
-        if (cantidad <= 0) return "La cantidad debe ser mayor a cero.";
-
-        if (nivelEnergia - cantidad < 0) {
-            nivelEnergia = 0;
-            return "El animal se quedó sin energía.";
+    // COMPORTAMIENTO 1: Reservar asiento
+    public boolean reservar() {
+        if (reservados < capacidad) {
+            reservados++;
+            return true;
         }
-
-        nivelEnergia -= cantidad;
-        return "El animal gastó energía. Energía actual: " + nivelEnergia;
+        return false;
     }
 
-    public String descansar(int cantidad) {
-        if (cantidad <= 0) return "La cantidad debe ser mayor a cero.";
-
-        nivelEnergia += cantidad;
-
-        if (nivelEnergia > 100) nivelEnergia = 100;
-
-        return "El animal descansó y recuperó energía. Energía actual: " + nivelEnergia;
+    // COMPORTAMIENTO 2: Porcentaje de ocupación
+    public double porcentajeOcupacion() {
+        return (reservados * 100.0) / capacidad;
     }
 }
 
-
-
-class ControlAnimal {
+class ControlVuelo {
 
     private Scanner lector = new Scanner(System.in);
 
     public void ejecutar() {
 
-        System.out.println("=== CONTROL DE ANIMALES ===");
+        System.out.println("=== SISTEMA DE RESERVAS DE VUELO ===");
 
-        System.out.print("Ingrese el nombre del animal: ");
-        String nombreAnimal = lector.nextLine();
+        System.out.print("Ingrese el código del vuelo: ");
+        String codigo = lector.nextLine();
 
-        System.out.print("Ingrese la especie del animal: ");
-        String especieAnimal = lector.nextLine();
+        System.out.print("Ingrese la capacidad total del vuelo: ");
+        int capacidad = lector.nextInt();
 
-        System.out.print("Ingrese la energía inicial (0 a 100): ");
-        int nivelEnergia = lector.nextInt();
+        System.out.print("Ingrese cuántos asientos ya están reservados: ");
+        int reservados = lector.nextInt();
 
-        Main animal = new Main(nombreAnimal, especieAnimal, nivelEnergia);
+        Main vuelo = new Main(codigo, capacidad, reservados);
 
-        System.out.println("\n=== DATOS DEL ANIMAL ===");
-        System.out.println("Nombre: " + animal.getNombreAnimal());
-        System.out.println("Especie: " + animal.getEspecieAnimal());
-        System.out.println("Energía actual: " + animal.getNivelEnergia());
+        System.out.println("\n=== DATOS DEL VUELO ===");
+        System.out.println("Código: " + vuelo.getCodigo());
+        System.out.println("Capacidad: " + vuelo.getCapacidad());
+        System.out.println("Reservados actualmente: " + vuelo.getReservados());
 
-        System.out.println("\n=== COMPORTAMIENTO 1: Consumir Energía ===");
-        System.out.print("¿Cuánta energía gastó el animal? ");
-        int gasto = lector.nextInt();
-        System.out.println(animal.consumirEnergia(gasto));
-        System.out.println("Energía restante: " + animal.getNivelEnergia());
+        System.out.println("\n=== COMPORTAMIENTO 1: Intentar reservar un asiento ===");
+        if (vuelo.reservar()) {
+            System.out.println("Reserva exitosa. Asientos ahora reservados: " + vuelo.getReservados());
+        } else {
+            System.out.println("No se puede reservar. El vuelo está lleno.");
+        }
 
-        System.out.println("\n=== COMPORTAMIENTO 2: Descansar ===");
-        System.out.print("¿Cuánta energía recuperó al descansar? ");
-        int recuperacion = lector.nextInt();
-        System.out.println(animal.descansar(recuperacion));
-        System.out.println("Energía final: " + animal.getNivelEnergia());
+        System.out.println("\n=== COMPORTAMIENTO 2: Porcentaje de ocupación ===");
+        System.out.println("Ocupación actual: " + vuelo.porcentajeOcupacion() + "%");
 
-        System.out.println("\n=== FIN DEL EJERCICIO 9 ===\n");
+        System.out.println("\n=== FIN DEL EJERCICIO DE VUELO ===\n");
     }
 }
