@@ -1,0 +1,79 @@
+import java.util.Scanner;
+
+// ===============================================================
+//  CLASE DEL PRODUCTO  (RENOMBRADA A: Main)
+// ===============================================================
+class Main {
+    private String codigoReferencia;
+    private int cantidadStock;
+    private double precioPorUnidad;
+
+    public Main(String codigoReferencia, int cantidadStock, double precioPorUnidad) {
+        this.codigoReferencia = codigoReferencia;
+        this.cantidadStock = cantidadStock;
+        this.precioPorUnidad = precioPorUnidad;
+    }
+
+    public String getCodigoReferencia() { return codigoReferencia; }
+    public void setCodigoReferencia(String codigoReferencia) { this.codigoReferencia = codigoReferencia; }
+
+    public int getCantidadStock() { return cantidadStock; }
+    public void setCantidadStock(int cantidadStock) { this.cantidadStock = cantidadStock; }
+
+    public double getPrecioPorUnidad() { return precioPorUnidad; }
+    public void setPrecioPorUnidad(double precioPorUnidad) { this.precioPorUnidad = precioPorUnidad; }
+
+    public void incrementarStock(int cantidadAgregar) {
+        if (cantidadAgregar > 0) {
+            cantidadStock += cantidadAgregar;
+        }
+    }
+
+    public double calcularValorTotal() {
+        return cantidadStock * precioPorUnidad;
+    }
+}
+
+
+// ===============================================================
+//  CONTROL DEL PRODUCTO
+// ===============================================================
+class ControlProducto {
+
+    private Scanner lector = new Scanner(System.in);
+
+    public void ejecutar() {
+
+        System.out.println("=== CONTROL DE INVENTARIO ===");
+
+        System.out.print("Ingrese la referencia del producto: ");
+        String referenciaProducto = lector.nextLine();
+
+        System.out.print("Ingrese la cantidad inicial en stock: ");
+        int cantidadInicial = lector.nextInt();
+
+        System.out.print("Ingrese el precio unitario: ");
+        double precioUnitarioIngresado = lector.nextDouble();
+
+        // Main = clase del producto
+        Main producto = new Main(referenciaProducto, cantidadInicial, precioUnitarioIngresado);
+
+        System.out.println("\n=== ATRIBUTOS DEL PRODUCTO ===");
+        System.out.println("Referencia: " + producto.getCodigoReferencia());
+        System.out.println("Cantidad actual: " + producto.getCantidadStock());
+        System.out.println("Precio unitario: $" + producto.getPrecioPorUnidad());
+
+        System.out.println("\n=== COMPORTAMIENTO 1: Incrementar Stock ===");
+        System.out.print("Ingrese la cantidad de mercancía que va a entrar: ");
+        int cantidadEntrante = lector.nextInt();
+
+        producto.incrementarStock(cantidadEntrante);
+        System.out.println("Stock actualizado: " + producto.getCantidadStock());
+
+        System.out.println("\n=== COMPORTAMIENTO 2: Valor Total del Stock ===");
+        double valorTotal = producto.calcularValorTotal();
+        System.out.println("Valor total del stock: $" + valorTotal);
+
+        System.out.println("\n=== FIN DEL EJERCICIO 2 ===\n");
+    }
+}
